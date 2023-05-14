@@ -72,6 +72,13 @@ function fill (array) {
     return array.length = 0;
 }
 
+function checkCellEnemy (x, y) {
+    if (x < 0 || x >= enemybattlefield.length || y < 0 ||y >= enemybattlefield[x].length) {
+        return undefined;
+    }
+    return enemybattlefield[x][y];
+}
+
 function checkCell(x, y) {
     if (x < 0 || x >= allaybattlefield.length || y < 0 ||y >= allaybattlefield[x].length) {
         return undefined;
@@ -126,13 +133,12 @@ function linkor(event) {
             initial(Number(event.target.id));
             document.getElementById(event.target.id).style.background = 'red';
             allaybattlefield[x][y] = 1;
-            thships --;
-            return;
+            fships --;
         }
         if (dir(Number(event.target.id)) === true) {
             document.getElementById(event.target.id).style.background = 'red';
             allaybattlefield[x][y] = 1;
-            thships --;
+            fships --;
         } else {return; }
         if (fships === 0) {
             ships --;
@@ -150,7 +156,7 @@ function craser(event) {
             if (begin === null) {
                 initial(Number(event.target.id));
                 document.getElementById(event.target.id).style.background = 'red';
-                allaybattlefield[x][y] = 1;
+                array.push(x, y);
                 thships --;
             }
             if (dir(Number(event.target.id)) === true) {
@@ -178,13 +184,13 @@ function esminec (event) {
     if (twships > 0) {
         if (check(x, y) === true) {
             if (begin === null) {
-                initial(event.target.id);
+                initial(Number(event.target.id));
                 document.getElementById(event.target.id).style.background = 'red';
                 array.push(x, y)
                 twships--;
                 return;
             }
-            if (dir(Number(event.target.id)) === true) {
+            if (dir(Number((event.target.id))) === true) {
                 document.getElementById(event.target.id).style.background = 'red';
                 array.push(x, y)
                 twships--;
@@ -221,15 +227,78 @@ function shlupka (event) {
     start();
 }
 
-function newTableEnbattlefield() {
-    document.getElementById('')
+function checkBbattlefield (x, y) {
+    return checkCellEnemy(x, y) === 1 || checkCellEnemy(x, y) === 2
+}
+
+function checkPbattlefield (x, y) {
+    return checkCell(x, y) === 1 || checkCell(x, y) === 2;
+}
+
+function shoot(event) {
+    if (move === 1) {
+        let x = Math.floor(((parseInt(event.target.id) % 100) - 1) / 10);
+        let y = ((parseInt(event.target.id) % 100) - 1) % 10;
+        if (checkBbattlefield(x, y) === true) {
+            document.getElementById(event.target.id).style.background = "blue";
+            enemybattlefield[x][y] = 2;
+            enships --;
+            shootPlayer();
+        } else {
+            document.getElementById(event.target.id).style.background = "green";
+            move = 0;
+            document.getElementById("arrow").src = "/picture/lot_NATO.png";
+            setTimeout(shootBot, 1000);
+        }
+    } else if (move === 0) {
+        let x = Math.floor(((Number(event) % 100) - 1) / 10);
+        let y = ((Number(event) % 100) - 1) % 10;
+        if (checkPbattlefield(x, y) === true) {
+            document.getElementById(event).style.background = "gray";
+            allaybattlefield[x][y] = 2;
+            alships--;
+            shootBot();
+        } else {
+            document.getElementById(event).style.background = "green";
+            document.getElementById("arrow").src = "/picture/lot_USSR.png"
+            move = 1;
+            shootPlayer();
+        }
+    }
+}
+
+function shootPlayer() {
+    document.getElementById("albattlefield").addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+    document.getElementById("enbattlefield").addEventListener("click", shoot);
+    if (enships === 0) {
+        alert("Победил Игрок!!")
+        window.location.reload();
+    }
+}
+
+function shootBot() {
+    let id = Math.floor(Math.random()*100) + 1;
+    shoot(String(id));
+    if (alships === 0) {
+        alert("Победил Бот!")
+        window.location.reload();
+    }
 }
 
 function startShoot() {
-
+    if (lot === 1) {
+        move = 1;
+        shootPlayer();
+    } if (lot === 2) {
+        move = 0;
+        shootBot();
+    }
 }
 
 function start() {
+    document.getElementById("img_USSR").style.display = "block";
     switch(ships) {
         case 4:
             document.getElementById("out").innerText = "Расположите линкор (4 клетки)";
@@ -249,6 +318,14 @@ function start() {
             break;
     }
     if (ships === 0) {
+        document.getElementById("out").remove();
+        newTableEnbattlefield();
         startShoot();
     }
+}
+
+function newTableEnbattlefield () {
+    document.getElementById("enbattlefield").style.display = "block";
+    document.getElementById("img_NATO").style.display = "block";
+    document.getElementById("arrow").style.display = "block";
 }

@@ -8,6 +8,7 @@ body {
     -webkit-user-select: none;
 }
 
+
 table {
     border-collapse: collapse;
     margin: 0 20px;
@@ -23,8 +24,18 @@ td {
 
 }
 
+.hidden {
+    display: none;
+}
+
 .hidden_id {
     color: transparent;
+}
+
+.battlefield {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #out {
@@ -34,4 +45,43 @@ td {
     color: white;
     font-family: "Comic Sans MS", serif;
     font-size: 25px;
+}
+
+
+.USSR {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.NATO {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#img_USSR {
+    display: none;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+#img_NATO {
+    display: none;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+#arrow {
+    width: 128px;
+    height: 128px;
+    display:none;
+    margin:auto;
+}
+
+#arrow {
+    width: 128px;
+    height: 128px;
+    display:none;
+    margin:auto;
 }
