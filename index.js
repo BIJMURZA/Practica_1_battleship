@@ -60,6 +60,33 @@ function reset () {
     direction = null;
 }
 
+function fill (array) {
+    for (let i = 0; i < array.length - 1; i += 2) {
+        let x = array[i];
+        let y = array[i+1];
+
+        if (checkCell(x, y) !== undefined) {
+            allaybattlefield[x][y] = 1;
+        }
+    }
+    return array.length = 0;
+}
+
+function checkCell(x, y) {
+    if (x < 0 || x >= allaybattlefield.length || y < 0 ||y >= allaybattlefield[x].length) {
+        return undefined;
+    }
+    return allaybattlefield[x][y];
+}
+
+function check (x, y) {
+    return (checkCell(x, y) !== 1) &&
+        (checkCell(x, y - 1) !== 1) && (checkCell(x, y + 1) !== 1) &&
+        (checkCell(x - 1, y) !== 1) && (checkCell(x + 1, y) !== 1) &&
+        (checkCell(x - 1, y - 1) !== 1) && (checkCell(x - 1, y + 1) !== 1) &&
+        (checkCell(x + 1, y - 1) !== 1) && (checkCell(x + 1, y + 1) !== 1);
+}
+
 function dir (id) {
     if (direction === null) {
         if (id === left - 1 || id === right + 1) {
@@ -99,13 +126,13 @@ function linkor(event) {
             initial(Number(event.target.id));
             document.getElementById(event.target.id).style.background = 'red';
             allaybattlefield[x][y] = 1;
-            fships --;
+            thships --;
             return;
         }
-        if (dir (Number(event.target.id)) === true) {
+        if (dir(Number(event.target.id)) === true) {
             document.getElementById(event.target.id).style.background = 'red';
             allaybattlefield[x][y] = 1;
-            fships --;
+            thships --;
         } else {return; }
         if (fships === 0) {
             ships --;
@@ -119,13 +146,87 @@ function craser(event) {
     let x = Math.floor((Number(event.target.id) - 1) / 10);
     let y = (Number (event.target.id) - 1) % 10;
     if (thships > 0) {
-        if (begin === null) {
-            initial(Number(event.target.id));
-            document.getElementById(event.target.id).style.background = 'red';
-            allaybattlefield[x][y] = 1;
-            fships --;
+        if (check(x, y) === true) {
+            if (begin === null) {
+                initial(Number(event.target.id));
+                document.getElementById(event.target.id).style.background = 'red';
+                allaybattlefield[x][y] = 1;
+                thships --;
+            }
+            if (dir(Number(event.target.id)) === true) {
+                document.getElementById(event.target.id).style.background = 'red';
+                array.push(x, y);
+                thships --;
+            }
+            if (thships === 3) {
+                fill(array);
+                reset();
+            }
+            if (thships === 0) {
+                fill(array);
+                reset();
+                ships --;
+            }
         }
     }
+    start();
+}
+
+function esminec (event) {
+    let x = Math.floor(( Number(event.target.id) - 1) / 10);
+    let y = (Number(event.target.id) - 1) % 10;
+    if (twships > 0) {
+        if (check(x, y) === true) {
+            if (begin === null) {
+                initial(event.target.id);
+                document.getElementById(event.target.id).style.background = 'red';
+                array.push(x, y)
+                twships--;
+                return;
+            }
+            if (dir(Number(event.target.id)) === true) {
+                document.getElementById(event.target.id).style.background = 'red';
+                array.push(x, y)
+                twships--;
+            }
+            if (twships === 4) {
+                fill(array);
+                reset();
+            } else if (twships === 2) {
+                fill(array);
+                reset();
+            } else if (twships === 0) {
+                reset();
+                fill(array);
+                ships--;
+            }
+        }
+    }
+    start();
+}
+
+function shlupka (event) {
+    let x = Math.floor(( Number(event.target.id) - 1) / 10);
+    let y = (Number(event.target.id) - 1) % 10;
+    if (shlupki > 0) {
+        if (check(x,y) === true) {
+            document.getElementById(event.target.id).style.background = 'red';
+            allaybattlefield[x][y] = 1;
+            shlupki --;
+        }
+    }
+    if (shlupki === 0) {
+        ships --;
+    }
+    start();
+}
+
+function newTableEnbattlefield() {
+    document.getElementById('')
+}
+
+function startShoot() {
+
 }
 
 function start() {
@@ -139,8 +240,15 @@ function start() {
             document.getElementById("albattlefield").addEventListener("click", craser);
             break;
         case 2:
+            document.getElementById("out").innerText = "Расположите 3 эсминца (каждая по 2 клетки)";
+            document.getElementById("albattlefield").addEventListener("click", esminec);
             break;
         case 1:
+            document.getElementById("out").innerText = "Расположите 4 шлюпки (каждая по 1 клетки)";
+            document.getElementById("albattlefield").addEventListener("click", shlupka);
             break;
+    }
+    if (ships === 0) {
+        startShoot();
     }
 }
