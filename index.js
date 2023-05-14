@@ -241,6 +241,8 @@ function shoot(event) {
         let y = ((parseInt(event.target.id) % 100) - 1) % 10;
         if (checkBbattlefield(x, y) === true) {
             document.getElementById(event.target.id).style.background = "blue";
+            document.getElementById(event.target.id).style.backgroundImage = "url(/picture/hit_USSR.png)";
+            document.getElementById(event.target.id).style.backgroundSize = "cover";
             enemybattlefield[x][y] = 2;
             enships --;
             shootPlayer();
@@ -254,7 +256,8 @@ function shoot(event) {
         let x = Math.floor(((Number(event) % 100) - 1) / 10);
         let y = ((Number(event) % 100) - 1) % 10;
         if (checkPbattlefield(x, y) === true) {
-            document.getElementById(event).style.background = "gray";
+            document.getElementById(event).style.backgroundImage = "url(/picture/hit_NATO.png)";
+            document.getElementById(event).style.backgroundSize = "cover";
             allaybattlefield[x][y] = 2;
             alships--;
             shootBot();

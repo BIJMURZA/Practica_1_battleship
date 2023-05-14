@@ -38,6 +38,17 @@ td {
     align-items: center;
 }
 
+.video_background {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    object-fit: cover;
+    object-position: center;
+}
+
 #out {
     display: flex;
     justify-content: center;
